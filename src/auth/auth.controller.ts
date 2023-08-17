@@ -1,32 +1,23 @@
-import { Controller,Get, Post } from "@nestjs/common";
-import { AuthService } from "./auth.service";
+import { Body, Controller, Post, Get } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { SignUpDto } from './dto/signup.dto';
+import { LoginDto } from './dto/signin.dto';
+
 @Controller('auth')
-/*
-    -> the controller will need to call the service.
-    -> the controller will recive a request from the internet, for instance , a POST request asking to login a user.
-    -> and then its going to call a function from the auth.service and return its result back to the client/browser.
-*/
-export class AuthController{
-    constructor(private authService : AuthService){}
-    // this.authService.test()
+export class AuthController {
+    constructor(private authService: AuthService){}
 
-    @Get()
-    helloW(){
-        return this.authService.helloW()
+    @Post('/signup')
+    signUp(
+        @Body()
+        signUpDto: SignUpDto
+    ):Promise<{token: string}>{
+        return this.authService.signUp(signUpDto)
 
     }
 
-    @Post('signup')
-    signup(){
-        return this.authService.signup()
+    @Get('/login')
+    login(@Body() loginDto: LoginDto): Promise<{token: string}>{
+        return this.authService.login(loginDto)
     }
-    @Post('signin')
-    signin(){
-        return this.authService.signin()
-    }
-    
-    // @Post('signup')
-
-    
-
 }
